@@ -2,6 +2,11 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'bot_twooper'
 
+if ARGV.include? '--update-sde'
+  result = BotTwooper::SDEUpdater.new.execute
+  exit(result)
+end
+
 if ARGV.size != 2
   puts "Usage: bot_twooper <jid> <password>"
   exit

@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "blather", "~> 1.2"
   spec.add_dependency "sequel", "~> 4"
   spec.add_dependency "sqlite3", "~> 1.3"
+  spec.add_dependency "rest-client"
   spec.add_development_dependency "bundler", "~> 1.12"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "minitest", "~> 5.0"
