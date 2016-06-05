@@ -3,7 +3,7 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'bot_twooper'
 
 if ARGV.include? '--update-sde'
-  result = BotTwooper::SDEUpdater.new.execute
+  result = BotTwooper::SDE::Updater.new.execute
   exit(result)
 end
 

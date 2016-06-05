@@ -1,6 +1,7 @@
 require_relative 'plugins/help'
 require_relative 'plugins/time'
 require_relative 'plugins/events'
+require_relative 'plugins/pricecheck'
 
 module BotTwooper
   module Plugins
