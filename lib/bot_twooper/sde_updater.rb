@@ -13,13 +13,12 @@ module BotTwooper
       fetch_sde
       if verify_sde
         extract_sde
+        logger.info("Done.")
+        SUCCESS
       else
         logger.error("Verify SDE failed...")
-        return ERROR
+        ERROR
       end
-      logger.info("Done.")
-
-      SUCCESS
     rescue Exception => e
       logger.error(e)
       ERROR
