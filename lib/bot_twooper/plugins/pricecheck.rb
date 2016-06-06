@@ -1,4 +1,4 @@
-require_relative 'pricecheck/helper'
+require_relative 'pricecheck/price_checker'
 
 module BotTwooper
   module Plugins
@@ -7,7 +7,8 @@ module BotTwooper
 
       def self.jita(message)
         if /\A\.\w+ (?<type_name>.+)\z/ =~ message.body
-          Helper.pricecheck(type_name, 'Jita')
+          checker = PriceChecker.new('jita')
+          checker.check(type_name)
         else
           USAGE
         end
