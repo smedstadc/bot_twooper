@@ -7,6 +7,16 @@ module BotTwooper
       class PriceChecker
         API_ENDPOINT = 'http://api.eve-central.com/api/marketstat'
 
+        def self.check(message, system)
+          if /\A\.\w+ (?<type_name>.+)\z/ =~ message.body
+            checker = new(system)
+            checker.check(type_name)
+            checker.messages
+          else
+            USAGE
+          end
+        end
+
         def initialize(system_name = nil)
           @system_name = system_name
           @messages = []
@@ -52,12 +62,18 @@ module BotTwooper
           uri = URI(API_ENDPOINT)
           uri.query = query
           @marketstat = Net::HTTP.get(uri)
+        rescue SocketError
+          @marketstat = "Sorry, I can't ping Eve-Central right now."
         end
 
 
+        # TODO: Figure out why bad response doesn't produce an error in the bot.
         def format_messages
-          if @marketstat
-            xml = Nokogiri::XML(@marketstat)
+          xml = Nokogiri::XML(@marketstat)
+
+          if xml.css('marketstat').empty?
+            @messages << @marketstat || "No marketstat response. (Eve-Central API might be down again.)"
+          else
             types = xml.css('type')
 
             types.each do |type|

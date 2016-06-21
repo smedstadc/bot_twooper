@@ -43,7 +43,7 @@ module BotTwooper
       def self.ops(message)
         global_events = Event.recent.where(room: 'global').order(:time)
 
-        response_lines = ["", "### GLOBAL ###"]
+        response_lines = ["### GLOBAL ###"]
         response_lines << "Empty..." if global_events.count == 0
         global_events.each do |event|
           response_lines << event.to_s
@@ -53,14 +53,14 @@ module BotTwooper
           room = message.from.node
           room_events = Event.recent.where(room: room).order(:time)
 
-          response_lines += ["", "### #{room.upcase} ###"]
+          response_lines += ["### #{room.upcase} ###"]
           response_lines << "Empty..." if room_events.count == 0
           room_events.each do |event|
             response_lines << event.to_s
           end
         end
 
-        response_lines.compact.join("\n")
+        response_lines.compact
       end
 
 

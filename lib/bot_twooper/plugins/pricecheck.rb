@@ -6,12 +6,23 @@ module BotTwooper
       USAGE = 'Usage: .jita <item>'
 
       def self.jita(message)
-        if /\A\.\w+ (?<type_name>.+)\z/ =~ message.body
-          checker = PriceChecker.new('jita')
-          checker.check(type_name)
-        else
-          USAGE
-        end
+        PriceChecker.check(message, 'jita')
+      end
+
+      def self.amarr(message)
+        PriceChecker.check(message, 'amarr')
+      end
+
+      def self.dodixie(message)
+        PriceChecker.check(message, 'dodixie')
+      end
+
+      def self.rens(message)
+        PriceChecker.check(message, 'rens')
+      end
+
+      def self.hek(message)
+        PriceChecker.check(message, 'hek')
       end
 
     end

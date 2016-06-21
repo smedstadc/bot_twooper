@@ -34,11 +34,24 @@ module BotTwooper
       end
     end
 
+    def unbind(reason)
+      puts "Connection lost: #{reason}"
+      exit(ERROR)
+    end
+
     private
     def response_for(message)
       unless message.delay || message.from.resource == @nick
         command = BotTwooper::Plugins.command_for(message)
-        command ? command.(message) : nil
+        response = command ? command.call(message) : nil
+
+        if response.is_a? Array
+          ([""] + response).join("\n")
+        elsif response.is_a? String
+          response
+        else
+          nil
+        end
       end
     end
 
