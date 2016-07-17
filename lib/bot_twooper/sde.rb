@@ -8,7 +8,7 @@ module BotTwooper
     SDE_CURRENT_PATH = "db/sqlite-latest.sqlite"
 
     if Dir[SDE_CURRENT_PATH].empty?
-      logger.warn("Could not load SDE data, you may need to fetch it with 'bot_twooper --update-sde'")
+      LOG.warn("Could not load SDE data, you may need to fetch it with 'bot_twooper --update-sde'")
     else
       DB = Sequel.sqlite(SDE::SDE_CURRENT_PATH)
     end

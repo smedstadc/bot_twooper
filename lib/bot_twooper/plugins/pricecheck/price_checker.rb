@@ -67,12 +67,11 @@ module BotTwooper
         end
 
 
-        # TODO: Figure out why bad response doesn't produce an error in the bot.
         def format_messages
           xml = Nokogiri::XML(@marketstat)
 
-          if xml.css('marketstat').empty?
-            @messages << @marketstat || "No marketstat response. (Eve-Central API might be down again.)"
+          if xml.css('marketstat').text.empty?  # empty response:  <marketstat></marketstat>
+            @messages << "That item doesn't exist or the API might be down."
           else
             types = xml.css('type')
 

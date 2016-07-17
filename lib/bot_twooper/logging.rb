@@ -1,11 +1,15 @@
+require 'logger'
+
 module BotTwooper
   module Logging
-    def logger
-      Logging.logger
-    end
-
     def self.logger
       @logger ||= Logger.new($stdout)
     end
+
+    def self.logger=(logger)
+      @logger = logger
+    end
   end
+
+  LOG = Logging.logger
 end
