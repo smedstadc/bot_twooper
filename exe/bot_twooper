@@ -7,16 +7,3 @@ if ARGV.include? '--update-sde'
   exit(result)
 end
 
-BotTwooper::LOG.info "Starting bot_twooper"
-
-rooms = ENV.fetch("BT_ROOMS") {
-  'testingbots@conference.psychotic-tendencies.net testingbots2@conference.psychotic-tendencies.net'
-}.split
-
-nick = ENV.fetch("BT_NICK") { 'bot_twooper' }
-jid = ENV.fetch("BT_JID")
-pass = ENV.fetch("BT_PASS")
-
-client = BotTwooper::Client.new(rooms: rooms, nick: nick)
-client.setup jid, pass
-EM.run { client.run }
