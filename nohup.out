@@ -1,0 +1,10 @@
+Using WSCS version: 0.3.0
+libsodium not available! You can continue to use discordrb as normal but voice support won't work.
+        Read https://github.com/meew0/discordrb/wiki/Installing-libsodium for more details.
+[INFO : gateway @ 2016-08-30 02:50:13.248] Discord using gateway protocol version: 4, requested: 4
+bundler: failed to load command: exe/bot_tooper_discord.rb (exe/bot_tooper_discord.rb)
+SignalException: SIGTERM
+  /var/lib/gems/2.3.0/gems/discordrb-2.1.3/lib/discordrb/bot.rb:283:in `join'
+  /var/lib/gems/2.3.0/gems/discordrb-2.1.3/lib/discordrb/bot.rb:283:in `sync'
+  /var/lib/gems/2.3.0/gems/discordrb-2.1.3/lib/discordrb/bot.rb:232:in `run'
+  exe/bot_tooper_discord.rb:27:in `<top (required)>'

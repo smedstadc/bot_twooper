@@ -10,6 +10,9 @@ token = ENV["DISCORD_BOT_TOKEN"]
 
 bot = Discordrb::Bot.new token: token, application_id: appid
 
+puts "This bot's invite URL is #{bot.invite_url}."
+puts 'Click on it to invite it to your server.'
+
 bot.message(in: 't-s-k') do |event|
   command = BotTwooper::Plugins.command_for(event)
   response = command ? command.call(event) : nil
@@ -19,7 +22,7 @@ bot.message(in: 't-s-k') do |event|
         event << line
       end
     elsif response.is_a? String
-      event.respond response unless response.blank?
+      event.respond response
     end
   end
 end
