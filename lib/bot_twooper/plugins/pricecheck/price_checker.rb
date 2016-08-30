@@ -7,8 +7,8 @@ module BotTwooper
       class PriceChecker
         API_ENDPOINT = 'http://api.eve-central.com/api/marketstat'
 
-        def self.check(message, system)
-          if /\A\.\w+ (?<type_name>.+)\z/ =~ message.body
+        def self.check(event, system)
+          if /\A\.\w+ (?<type_name>.+)\z/ =~ event.message.content
             checker = new(system)
             checker.check(type_name)
             checker.messages

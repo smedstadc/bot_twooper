@@ -4,11 +4,11 @@ module BotTwooper
   module Plugins
     module Time
 
-      def self.upladtime(message)
+      def self.upladtime(event)
         ::Time.now.iso8601
       end
 
-      def self.time(message)
+      def self.time(event)
         ::Time.now.httpdate
       end
 

@@ -5,24 +5,24 @@ module BotTwooper
     module PriceCheck
       USAGE = 'Usage: .jita <item>'
 
-      def self.jita(message)
-        PriceChecker.check(message, 'jita')
+      def self.jita(event)
+        PriceChecker.check(event, 'jita')
       end
 
-      def self.amarr(message)
-        PriceChecker.check(message, 'amarr')
+      def self.amarr(event)
+        PriceChecker.check(event, 'amarr')
       end
 
-      def self.dodixie(message)
-        PriceChecker.check(message, 'dodixie')
+      def self.dodixie(event)
+        PriceChecker.check(event, 'dodixie')
       end
 
-      def self.rens(message)
-        PriceChecker.check(message, 'rens')
+      def self.rens(event)
+        PriceChecker.check(event, 'rens')
       end
 
-      def self.hek(message)
-        PriceChecker.check(message, 'hek')
+      def self.hek(event)
+        PriceChecker.check(event, 'hek')
       end
 
     end

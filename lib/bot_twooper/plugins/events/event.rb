@@ -8,14 +8,14 @@ module BotTwooper
 
         subset(:recent) { time > ::Time.now - HOUR }
 
-        def self.from_countdown(message, options={})
-          match = COUNTDOWN_PATTERN.match(message.body)
+        def self.from_countdown(discordevent)
+          match = COUNTDOWN_PATTERN.match(discordevent.message.content)
 
           if match
             event = Event.new do |event|
               event.time = ::Time.now + match[:days].to_i * DAY + match[:hours].to_i * HOUR + match[:minutes].to_i * MINUTE
               event.message = match[:message].strip
-              event.room = options[:global] ? 'global' : message.from.node
+              event.room = "#{discordevent.server.id}/#{discordevent.channel.id}"
             end
           else
             nil
@@ -23,14 +23,14 @@ module BotTwooper
         end
 
 
-        def self.from_datetime(message, options={})
-          match = DATETIME_PATTERN.match(message.body)
+        def self.from_datetime(discordevent)
+          match = DATETIME_PATTERN.match(discordevent.content)
 
           if match
             event = Event.new do |event|
               event.time = ::Time.new(match[:year], match[:month], match[:day], match[:hour], match[:minute])
               event.message = match[:message].strip
-              event.room = options[:global] ? 'global' : message.from.node
+              event.room = "#{discordevent.server.id}/#{discordevent.channel.id}"
             end
           else
             nil
