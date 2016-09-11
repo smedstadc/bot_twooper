@@ -13,7 +13,7 @@ bot = Discordrb::Bot.new token: token, application_id: appid
 puts "This bot's invite URL is #{bot.invite_url}."
 puts 'Click on it to invite it to your server.'
 
-bot.message(in: 't-s-k') do |event|
+bot.message do |event|
   command = BotTwooper::Plugins.command_for(event)
   response = command ? command.call(event) : nil
   unless response.nil? || response.empty?
