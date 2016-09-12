@@ -23,7 +23,7 @@ module BotTwooper
       end
 
       def self.ops(discordevent)
-        room = "#{discordevent.server.id}/#{discordevent.channel.id}"
+        room = "#{discordevent.server&.id || "PERSONAL"}/#{discordevent.channel.id}"
         room_events = Event.recent.where(room: room).order(:time)
 
         response_lines = ["### Ops for this room ###"]
@@ -37,7 +37,7 @@ module BotTwooper
 
 
       def self.rmop(discordevent)
-        room = "#{discordevent.server.id}/#{discordevent.channel.id}"
+        room = "#{discordevent.server&.id || "PERSONAL"}/#{discordevent.channel.id}"
         match = RMOP_PATTERN.match(discordevent.message.content)
         if match
           event = Event.find(id: match[:id], room: room)

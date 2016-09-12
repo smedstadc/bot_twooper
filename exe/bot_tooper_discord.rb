@@ -19,8 +19,11 @@ bot.message do |event|
   unless response.nil? || response.empty?
     if response.is_a? Array
       event << "```\n"
-      response.each do |line|
+      response.sort[0...10].each do |line|
         event << line
+      end
+      if response.size > 10
+        event << "...and #{response.size - 10} more results, could you be more specific?"
       end
       event << "```"
     elsif response.is_a? String

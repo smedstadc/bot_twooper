@@ -15,7 +15,7 @@ module BotTwooper
             event = Event.new do |event|
               event.time = ::Time.now + match[:days].to_i * DAY + match[:hours].to_i * HOUR + match[:minutes].to_i * MINUTE
               event.message = match[:message].strip
-              event.room = "#{discordevent.server.id}/#{discordevent.channel.id}"
+              event.room = "#{discordevent.server&.id || "PERSONAL"}/#{discordevent.channel.id}"
             end
           else
             nil
@@ -30,7 +30,7 @@ module BotTwooper
             event = Event.new do |event|
               event.time = ::Time.new(match[:year], match[:month], match[:day], match[:hour], match[:minute])
               event.message = match[:message].strip
-              event.room = "#{discordevent.server.id}/#{discordevent.channel.id}"
+              event.room = "#{discordevent.server&.id || "PERSONAL"}/#{discordevent.channel.id}"
             end
           else
             nil
