@@ -18,11 +18,13 @@ bot.message do |event|
   response = command ? command.call(event) : nil
   unless response.nil? || response.empty?
     if response.is_a? Array
+      event << "```\n"
       response.each do |line|
         event << line
       end
+      event << "```"
     elsif response.is_a? String
-      event.respond response
+      event.respond "\n`#{response}`"
     end
   end
 end
