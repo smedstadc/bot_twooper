@@ -11,7 +11,7 @@ module BotTwooper
           if /\A\.\w+ (?<type_name>.+)\z/ =~ event.message.content
             checker = new(system)
             checker.check(type_name)
-            checker.messages
+            checker.messages.sort
           else
             USAGE
           end
@@ -29,7 +29,6 @@ module BotTwooper
           fetch_type_ids
           fetch_marketstat
           format_messages
-          messages.sort
         end
 
         def messages
