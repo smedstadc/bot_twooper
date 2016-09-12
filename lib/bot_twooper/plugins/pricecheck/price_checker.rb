@@ -28,7 +28,7 @@ module BotTwooper
           fetch_region_id if @system_name
           fetch_type_ids
           fetch_marketstat
-          format_messages
+          format_messages.sort
         end
 
         def messages
