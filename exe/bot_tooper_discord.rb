@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
 #coding: utf-8
-require 'dotenv'
 require 'discordrb'
 require 'bot_twooper'
 
-Dotenv.load '.env'
-appid = ENV["DISCORD_APP_ID"]
-token = ENV["DISCORD_BOT_TOKEN"]
+if ARGV.include?("--with-dotenv")
+  require 'dotenv'
+  Dotenv.load '.env'
+end
 
-bot = Discordrb::Bot.new token: token, application_id: appid
+bot = Discordrb::Bot.new(token: ENV["DISCORD_BOT_TOKEN"], application_id: ENV["DISCORD_APP_ID"])
 
 puts "This bot's invite URL is #{bot.invite_url}."
 puts 'Click on it to invite it to your server.'
