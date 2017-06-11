@@ -66,7 +66,6 @@ module BotTwooper
                     .exclude(Sequel.ilike(:typeName, '%blueprint%'))
                     .exclude(marketGroupID: nil)
                     .exclude(published: 0)
-                    .limit(1)
 
           @type_ids = types.collect {|row| row[:typeID]}
         end
