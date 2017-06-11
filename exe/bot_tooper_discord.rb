@@ -8,7 +8,7 @@ Dotenv.load '.env'
 appid = ENV["DISCORD_APP_ID"]
 token = ENV["DISCORD_BOT_TOKEN"]
 
-bot = Discordrb::Bot.new token: token, application_id: appid
+bot = Discordrb::Bot.new token: token, client_id: appid
 
 puts "This bot's invite URL is #{bot.invite_url}."
 puts 'Click on it to invite it to your server.'
