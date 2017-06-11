@@ -23,7 +23,7 @@ bot.message do |event|
         event << line
       end
       if response.size > 10
-        event << "...and #{response.size - 10} more results, could you be more specific?"
+        event << "...and #{response.size - 10} more lines, could you be more specific?"
       end
       event << "```"
     elsif response.is_a? String

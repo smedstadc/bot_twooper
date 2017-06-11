@@ -45,11 +45,28 @@ module BotTwooper
 
 
         def fetch_type_ids
+          @search_term.start_with?('!') ? fetch_single_type : fetch_all_types
+        end
+
+        def fetch_single_type
+          exact_term = @search_term.gsub('!', '')
           types = SDE::DB[:invTypes]
-            .where(Sequel.ilike(:typeName, "%#{@search_term}%"))
-            .exclude(Sequel.ilike(:typeName, '%blueprint%'))
-            .exclude(marketGroupID: nil)
-            .exclude(published: 0)
+                    .where(Sequel.ilike(:typeName, "#{exact_term}"))
+                    .exclude(Sequel.ilike(:typeName, '%blueprint%'))
+                    .exclude(marketGroupID: nil)
+                    .exclude(published: 0)
+                    .limit(1)
+
+          @type_ids = types.collect {|row| row[:typeID]}
+        end
+
+        def fetch_all_types
+          types = SDE::DB[:invTypes]
+                    .where(Sequel.ilike(:typeName, "%#{@search_term}%"))
+                    .exclude(Sequel.ilike(:typeName, '%blueprint%'))
+                    .exclude(marketGroupID: nil)
+                    .exclude(published: 0)
+                    .limit(1)
 
           @type_ids = types.collect {|row| row[:typeID]}
         end
