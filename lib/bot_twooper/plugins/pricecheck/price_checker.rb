@@ -5,7 +5,7 @@ module BotTwooper
   module Plugins
     module PriceCheck
       class PriceChecker
-        API_ENDPOINT = 'http://api.eve-central.com/api/marketstat'
+        API_ENDPOINT = 'http://api.eve-central.com/api/marketstat'.freeze
 
         def self.check(event, system)
           if /\A\.\w+ (?<type_name>.+)\z/ =~ event.message.content
@@ -26,6 +26,7 @@ module BotTwooper
         def check(item_name)
           @search_term = item_name
           fetch_region_id if @system_name
+          fetch_system_id if @system_name
           fetch_type_ids
           fetch_marketstat
           format_messages
@@ -37,10 +38,19 @@ module BotTwooper
 
 
         private
+
         def fetch_region_id
           @region_id = SDE::DB[:mapDenormalize].select(:regionID)
-            .where(Sequel.ilike(:itemName, @system_name))
-            .first[:regionID]
+                           .where(Sequel.ilike(:itemName, @system_name))
+                           .first[:regionID]
+        end
+
+        def fetch_system_id
+          @system_id = SDE::DB[:mapSolarSystems].select(:solarSystemID)
+                           .where(solarSystemName: @system_name.capitalize)
+                           .first[:solarSystemID]
+          puts @system_name
+          puts @system_id
         end
 
 
@@ -51,21 +61,21 @@ module BotTwooper
         def fetch_single_type
           exact_term = @search_term.gsub('!', '')
           types = SDE::DB[:invTypes]
-                    .where(Sequel.ilike(:typeName, "#{exact_term}"))
-                    .exclude(Sequel.ilike(:typeName, '%blueprint%'))
-                    .exclude(marketGroupID: nil)
-                    .exclude(published: 0)
-                    .limit(1)
+                      .where(Sequel.ilike(:typeName, "#{exact_term}"))
+                      .exclude(Sequel.ilike(:typeName, '%blueprint%'))
+                      .exclude(marketGroupID: nil)
+                      .exclude(published: 0)
+                      .limit(1)
 
           @type_ids = types.collect {|row| row[:typeID]}
         end
 
         def fetch_all_types
           types = SDE::DB[:invTypes]
-                    .where(Sequel.ilike(:typeName, "%#{@search_term}%"))
-                    .exclude(Sequel.ilike(:typeName, '%blueprint%'))
-                    .exclude(marketGroupID: nil)
-                    .exclude(published: 0)
+                      .where(Sequel.ilike(:typeName, "%#{@search_term}%"))
+                      .exclude(Sequel.ilike(:typeName, '%blueprint%'))
+                      .exclude(marketGroupID: nil)
+                      .exclude(published: 0)
 
           @type_ids = types.collect {|row| row[:typeID]}
         end
@@ -73,21 +83,22 @@ module BotTwooper
 
         def fetch_marketstat
           params = {typeid: @type_ids}
-          params.merge!(regionlimit: @region_id) if @region_id
+          params.merge!(usesystem: @system_id) if @system_id
           query = URI.encode_www_form(params)
+          puts query
           uri = URI(API_ENDPOINT)
           uri.query = query
           @marketstat = Net::HTTP.get(uri)
         rescue SocketError
-          @marketstat = "Sorry, I can't ping Eve-Central right now."
+          @marketstat = "Network error, try again later."
         end
 
 
         def format_messages
           xml = Nokogiri::XML(@marketstat)
 
-          if xml.css('marketstat').text.empty?  # empty response:  <marketstat></marketstat>
-            @messages << "That item doesn't exist or the API might be down."
+          if xml.css('marketstat').text.empty? # empty response:  <marketstat></marketstat>
+            @messages << "Empty response. Sometimes this happens when your search term matches too many items. (Try '.jita !#{@search_term}' for an exact match.)"
           else
             types = xml.css('type')
 
@@ -114,7 +125,7 @@ module BotTwooper
 
 
         def number_with_commas(number)
-          number.to_s.gsub(/(\d)(?=\d{3}+(?:\.|$))(\d{3}\..*)?/,'\1,\2')
+          number.to_s.gsub(/(\d)(?=\d{3}+(?:\.|$))(\d{3}\..*)?/, '\1,\2')
         end
 
       end
