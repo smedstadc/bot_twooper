@@ -49,8 +49,6 @@ module BotTwooper
           @system_id = SDE::DB[:mapSolarSystems].select(:solarSystemID)
                            .where(solarSystemName: @system_name.capitalize)
                            .first[:solarSystemID]
-          puts @system_name
-          puts @system_id
         end
 
 
@@ -85,7 +83,6 @@ module BotTwooper
           params = {typeid: @type_ids}
           params.merge!(usesystem: @system_id) if @system_id
           query = URI.encode_www_form(params)
-          puts query
           uri = URI(API_ENDPOINT)
           uri.query = query
           @marketstat = Net::HTTP.get(uri)
