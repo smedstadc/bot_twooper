@@ -1,4 +1,6 @@
-require 'open-uri'
+# frozen_string_literal: true
+
+require "open-uri"
 
 module BotTwooper
   module SDE
@@ -12,12 +14,13 @@ module BotTwooper
         else
           ERROR
         end
-      rescue Exception => e
+      rescue StandardError => e
         LOG.error(e)
         ERROR
       end
 
       private
+
       def fetch_sde
         LOG.info("Fetching SDE...")
         sde = open(SDE_URI)

@@ -1,4 +1,6 @@
-require_relative 'sde/updater'
+# frozen_string_literal: true
+
+require_relative "sde/updater"
 
 module BotTwooper
   module SDE

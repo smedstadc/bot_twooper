@@ -1,17 +1,19 @@
-require 'blather/client/dsl'
+# frozen_string_literal: true
+
+require "blather/client/dsl"
 
 module BotTwooper
   class Client
     include Blather::DSL
 
-    def initialize(options={})
+    def initialize(options = {})
       @rooms = options[:rooms]
       @nick = options[:nick]
       post_init
     end
 
     def post_init
-      self.when_ready do
+      when_ready do
         puts "Connected..."
         puts "\n"
         @rooms.each do |room|
@@ -40,20 +42,20 @@ module BotTwooper
     end
 
     private
-    def response_for(message)
-      unless message.delay || message.from.resource == @nick
-        command = BotTwooper::Plugins.command_for(message)
-        response = command ? command.call(message) : nil
 
-        if response.is_a? Array
-          ([""] + response).join("\n")
-        elsif response.is_a? String
-          response
-        else
-          nil
-        end
-      end
+    def response_for(message)
+      handle_message(message) unless message.delay || message.from.resource == @nick
     end
 
+    def handle_message(message)
+      command = BotTwooper::Plugins.command_for(message)
+      response = command ? command.call(message) : nil
+
+      if response.is_a? Array
+        ([""] + response).join("\n")
+      elsif response.is_a? String
+        response
+      end
+    end
   end
 end

@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'bot_twooper'
+# frozen_string_literal: true
 
-if ARGV.include? '--update-sde'
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+require "bot_twooper"
+
+if ARGV.include? "--update-sde"
   result = BotTwooper::SDE::Updater.new.execute
   exit(result)
 end
-
