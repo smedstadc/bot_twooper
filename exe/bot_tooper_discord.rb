@@ -14,6 +14,11 @@ bot = Discordrb::Bot.new token: token, client_id: appid
 puts "This bot's invite URL is #{bot.invite_url}."
 puts "Click on it to invite it to your server."
 
+bot.disconnected do |diconnect_event|
+  puts "disconnect event, letting process die"
+  exit(0)
+end
+
 bot.message do |event|
   command = BotTwooper::Plugins.command_for(event)
   response = command ? command.call(event) : nil
