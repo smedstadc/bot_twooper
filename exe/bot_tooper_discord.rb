@@ -9,8 +9,11 @@ Dotenv.load ".env"
 appid = ENV["DISCORD_APP_ID"]
 token = ENV["DISCORD_BOT_TOKEN"]
 
-bot = Discordrb::Bot.new token: token, client_id: appid
+trap("SIGINT") { exit(130) }
+trap("SIGKILL") { exit(1) }
+trap("SIGHUP") { exit(1) }
 
+bot = Discordrb::Bot.new token: token, client_id: appid
 logger.info "bot-tooper is starting..."
 logger.info "This bot's invite URL is #{bot.invite_url}."
 puts "Click on it to invite it to your server."
