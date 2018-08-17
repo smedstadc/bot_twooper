@@ -16,7 +16,6 @@ trap("SIGHUP") { exit(1) }
 bot = Discordrb::Bot.new token: token, client_id: appid
 logger.info "bot-tooper is starting..."
 logger.info "This bot's invite URL is #{bot.invite_url}."
-puts "Click on it to invite it to your server."
 
 bot.disconnected do |diconnect_event|
   logger.info "disconnect detected, letting process die"
