@@ -12,9 +12,12 @@ module BotTwooper
     end
 
     def self.find_command_handler(command_string)
+      logger.debug "finding command for #{command_string}"
       plugins = constants.map { |constant| const_get(constant) }
       result = plugins.find { |plugin| plugin.respond_to?(command_string) }
-      result ? result.method(command_string) : nil
+      command_handler = result ? result.method(command_string) : nil
+      logger.debug "found command handler: #{command_handler}"
+      return command_handler
     end
   end
 end

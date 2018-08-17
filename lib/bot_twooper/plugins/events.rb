@@ -31,6 +31,7 @@ module BotTwooper
       Sequel::Migrator.run(DB, MIGRATIONS_PATH, use_transactions: true)
 
       def self.addop(discord_event)
+        logger.debug("processing 'addop' command for #{discord_event}")
         event = Event.from_countdown(discord_event) || Event.from_datetime(discord_event)
         if event&.valid?
           event.save
@@ -41,6 +42,7 @@ module BotTwooper
       end
 
       def self.ops(discord_event)
+        logger.debug("processing 'ops' command for #{discord_event}")
         room = "#{discord_event.server&.id || 'PERSONAL'}/#{discord_event.channel.id}"
         room_events = Event.recent.where(room: room).order(:time)
 
@@ -54,9 +56,11 @@ module BotTwooper
       end
 
       def self.rmop(discord_event)
+        logger.debug("processing 'rmop' command for #{discord_event}")
         room = "#{discord_event.server&.id || 'PERSONAL'}/#{discord_event.channel.id}"
         match = RMOP_PATTERN.match(discord_event.message.content)
         if match
+          logger.debug "attempting to remove event with id #{match[:id]}"
           event = Event.find(id: match[:id], room: room)
           if event
             event.delete
@@ -65,6 +69,7 @@ module BotTwooper
             "Sorry, I can't do that."
           end
         else
+          logger.debug "bad command pattern"
           RMOP_USAGE
         end
       end

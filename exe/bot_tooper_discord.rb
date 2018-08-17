@@ -11,19 +11,22 @@ token = ENV["DISCORD_BOT_TOKEN"]
 
 bot = Discordrb::Bot.new token: token, client_id: appid
 
-puts "This bot's invite URL is #{bot.invite_url}."
+logger.info "bot-tooper is starting..."
+logger.info "This bot's invite URL is #{bot.invite_url}."
 puts "Click on it to invite it to your server."
 
 bot.disconnected do |diconnect_event|
-  puts "disconnect event, letting process die"
+  logger.info "disconnect detected, letting process die"
   exit(0)
 end
 
 bot.message do |event|
+  logger.debug "message received: #{event.message.content.inspect}"
   command = BotTwooper::Plugins.command_for(event)
   response = command ? command.call(event) : nil
 
   unless response.nil? || response.empty?
+    logger.debug "sending response"
     if response.is_a? Array
       event << "```\n"
       response[0...10].each do |line|

@@ -8,14 +8,40 @@ module BotTwooper
         HOUR = 3600  # ..
         MINUTE = 60  # ..
 
-        subset(:recent) { time > ::Time.now - HOUR }
-
-        def self.from_countdown(discord_event)
-          event_from_countdown if COUNTDOWN_PATTERN.match(discord_event.message.content)
+        dataset_module do
+          subset(:recent) { time > ::Time.now - HOUR }
         end
 
-        def self.from_datetime(discord_event)
-          event_from_datetime if DATETIME_PATTERN.match(discord_event.content)
+        class << self
+          def from_countdown(discord_event)
+            event_from_countdown(discord_event) if COUNTDOWN_PATTERN.match?(discord_event.message.content)
+          end
+
+          def from_datetime(discord_event)
+            event_from_datetime(discord_event) if DATETIME_PATTERN.match?(discord_event.content)
+          end
+
+          def event_from_countdown(discord_event)
+            logger.debug "creating event from countdown params"
+            match = COUNTDOWN_PATTERN.match(discord_event.message.content)
+
+            Event.new do |e|
+              e.time = ::Time.now + match[:days].to_i * DAY + match[:hours].to_i * HOUR + match[:minutes].to_i * MINUTE
+              e.message = match[:message].strip
+              e.room = "#{discord_event.server&.id || 'PERSONAL'}/#{discord_event.channel.id}"
+            end
+          end
+
+          def event_from_datetime(discord_event)
+            logger.debug "creating event from datetime params"
+            match = DATETIME_PATTERN.match(discord_event.content)
+
+            Event.new do |e|
+              e.time = ::Time.new(match[:year], match[:month], match[:day], match[:hour], match[:minute])
+              e.message = match[:message].strip
+              e.room = "#{discord_event.server&.id || 'PERSONAL'}/#{discord_event.channel.id}"
+            end
+          end
         end
 
         def validate
@@ -46,22 +72,6 @@ module BotTwooper
           hours = seconds % DAY / HOUR
           minutes = seconds % DAY % HOUR / MINUTE
           format("%4.4sd %2.2sh %2.2sm", days, hours, minutes)
-        end
-
-        def event_from_countdown(discord_event)
-          Event.new do |e|
-            e.time = ::Time.now + match[:days].to_i * DAY + match[:hours].to_i * HOUR + match[:minutes].to_i * MINUTE
-            e.message = match[:message].strip
-            e.room = "#{discord_event.server&.id || 'PERSONAL'}/#{discord_event.channel.id}"
-          end
-        end
-
-        def event_from_datetime(discord_event)
-          Event.new do |e|
-            e.time = ::Time.new(match[:year], match[:month], match[:day], match[:hour], match[:minute])
-            e.message = match[:message].strip
-            e.room = "#{discord_event.server&.id || 'PERSONAL'}/#{discord_event.channel.id}"
-          end
         end
       end
     end

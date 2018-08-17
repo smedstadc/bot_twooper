@@ -13,5 +13,5 @@ module BotTwooper
     end
   end
 
-  LOG = Logging.logger
+  $logger = Logging.logger
 end
