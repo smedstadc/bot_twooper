@@ -14,11 +14,11 @@ module BotTwooper
 
         class << self
           def from_countdown(discord_event)
-            event_from_countdown(discord_event) if COUNTDOWN_PATTERN.match?(discord_event.message.content)
+            event_from_countdown(discord_event) if COUNTDOWN_PATTERN.match(discord_event.message.content)
           end
 
           def from_datetime(discord_event)
-            event_from_datetime(discord_event) if DATETIME_PATTERN.match?(discord_event.content)
+            event_from_datetime(discord_event) if DATETIME_PATTERN.match(discord_event.content)
           end
 
           def event_from_countdown(discord_event)

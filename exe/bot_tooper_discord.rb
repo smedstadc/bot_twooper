@@ -10,6 +10,7 @@ appid = ENV["DISCORD_APP_ID"]
 token = ENV["DISCORD_BOT_TOKEN"]
 
 trap("SIGINT") { exit(130) }
+trap("SIGTERM") { exit(0) }
 trap("SIGHUP") { exit(1) }
 
 bot = Discordrb::Bot.new token: token, client_id: appid
